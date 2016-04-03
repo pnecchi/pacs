@@ -1,0 +1,81 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BINDIR	Makefile	/^BINDIR   = bin$/;"	m
+CPPFLAGS	Makefile	/^CPPFLAGS = -std=c++11$/;"	m
+CXX	Makefile	/^CXX      = g++ 			# Alternative: clang++$/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS = -g -Wall -O0$/;"	m
+HDRDIR	Makefile	/^HDRDIR   = include$/;"	m
+HEADERS	Makefile	/^HEADERS = $(wildcard $(HDRDIR)\/*.h)$/;"	m
+HEATEQUATION_H	include/heatEquation.h	2;"	d
+MATRIX_H	include/Matrix.h	2;"	d
+MESH_H	include/Mesh.h	2;"	d
+Matrix	include/Matrix.h	/^class Matrix$/;"	c
+Matrix	src/Matrix.cpp	/^Matrix::Matrix ()$/;"	f	class:Matrix
+Matrix	src/Matrix.cpp	/^Matrix::Matrix (Matrix& matrix_)$/;"	f	class:Matrix
+Matrix	src/Matrix.cpp	/^Matrix::Matrix (unsigned long nrow_, unsigned long ncol_, double val_ = 0.0)$/;"	f	class:Matrix
+Matrix	src/Matrix.cpp	/^virtual ~Matrix::Matrix ()$/;"	f	class:~Matrix
+Mesh	include/Mesh.h	/^class Mesh$/;"	c
+Mesh	src/Mesh.cpp	/^Mesh::Mesh()$/;"	f	class:Mesh
+Mesh	src/Mesh.cpp	/^Mesh::Mesh(const Mesh& Mesh_)$/;"	f	class:Mesh
+Mesh	src/Mesh.cpp	/^Mesh::Mesh(double xMin, double xMax, unsigned long NNodes_)$/;"	f	class:Mesh
+N	include/TridiagonalMatrix.h	/^        unsigned long N;$/;"	m	class:TridiagonalMatrix
+NNodes	include/Mesh.h	/^        unsigned long NNodes;$/;"	m	class:Mesh
+Ncol	src/Matrix.cpp	/^unsigned long Ncol() const$/;"	f
+Nrow	src/Matrix.cpp	/^unsigned long Matrix::Nrow() const$/;"	f	class:Matrix
+OBJDIR	Makefile	/^OBJDIR   = obj$/;"	m
+OBJECTS	Makefile	/^OBJECTS := $(addprefix $(OBJDIR)\/,$(OBJECTS))$/;"	m
+OBJECTS	Makefile	/^OBJECTS := $(patsubst $(SRCDIR)\/%,%,$(SOURCES))$/;"	m
+OBJECTS	Makefile	/^OBJECTS := $(patsubst %.cpp,%.o,$(OBJECTS))$/;"	m
+RM	Makefile	/^RM = rm -f$/;"	m
+SOLVETRIDIAGONALSYSTEM_H	include/solveTridiagonalSystem.h	2;"	d
+SOURCES	Makefile	/^SOURCES = $(wildcard $(SRCDIR)\/*.cpp)$/;"	m
+SRCDIR	Makefile	/^SRCDIR   = src$/;"	m
+TARGET	Makefile	/^TARGET   = main$/;"	m
+TRIDIAGONALMATRIX_H	include/TridiagonalMatrix.h	2;"	d
+TridiagonalMatrix	include/TridiagonalMatrix.h	/^class TridiagonalMatrix$/;"	c
+TridiagonalMatrix	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix::TridiagonalMatrix()$/;"	f	class:TridiagonalMatrix
+TridiagonalMatrix	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix::TridiagonalMatrix(const TridiagonalMatrix& other)$/;"	f	class:TridiagonalMatrix
+TridiagonalMatrix	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix::TridiagonalMatrix(const std::vector<double>& lowerDiagonal_,$/;"	f	class:TridiagonalMatrix
+TridiagonalMatrix	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix::TridiagonalMatrix(size_t N_)$/;"	f	class:TridiagonalMatrix
+diagonal	include/TridiagonalMatrix.h	/^        std::vector<double> diagonal;$/;"	m	class:TridiagonalMatrix
+diagonalElement	src/TridiagonalMatrix.cpp	/^double TridiagonalMatrix::diagonalElement(size_t idx) const$/;"	f	class:TridiagonalMatrix
+diagonalElement	src/TridiagonalMatrix.cpp	/^double& TridiagonalMatrix::diagonalElement(unsigned long idx)$/;"	f	class:TridiagonalMatrix
+element	src/TridiagonalMatrix.cpp	/^double TridiagonalMatrix::element(unsigned long rowIdx, unsigned long colIdx) const$/;"	f	class:TridiagonalMatrix
+element	src/TridiagonalMatrix.cpp	/^double& TridiagonalMatrix::element(unsigned long rowIdx, unsigned long colIdx)$/;"	f	class:TridiagonalMatrix
+elements	include/Mesh.h	/^        std::vector<std::vector<unsigned long>> elements;$/;"	m	class:Mesh
+getElementNodes	src/Mesh.cpp	/^std::vector<unsigned long> Mesh::getElementNodes(unsigned long idx) const$/;"	f	class:Mesh
+getNode	src/Mesh.cpp	/^double Mesh::getNode(unsigned long idx) const$/;"	f	class:Mesh
+getStep	src/Mesh.cpp	/^double Mesh::getStep() const$/;"	f	class:Mesh
+lowerDiagonal	include/TridiagonalMatrix.h	/^        std::vector<double> lowerDiagonal;$/;"	m	class:TridiagonalMatrix
+lowerDiagonalElement	src/TridiagonalMatrix.cpp	/^double TridiagonalMatrix::lowerDiagonalElement(size_t idx) const$/;"	f	class:TridiagonalMatrix
+lowerDiagonalElement	src/TridiagonalMatrix.cpp	/^double& TridiagonalMatrix::lowerDiagonalElement(unsigned long idx)$/;"	f	class:TridiagonalMatrix
+main	src/main.cpp	/^int main (int argc, char* argv[])$/;"	f
+mat	include/Matrix.h	/^	std::vector<std::vector<double>> mat;$/;"	m	class:Matrix
+ncol	include/Matrix.h	/^	unsigned long ncol;$/;"	m	class:Matrix
+nodes	include/Mesh.h	/^        std::vector<double> nodes;$/;"	m	class:Mesh
+nrow	include/Matrix.h	/^	unsigned long nrow;$/;"	m	class:Matrix
+operator *	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix operator*(const TridiagonalMatrix& A, const TridiagonalMatrix& B)$/;"	f
+operator *=	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix& TridiagonalMatrix::operator*=(TridiagonalMatrix& Matrlx_)$/;"	f	class:TridiagonalMatrix
+operator +	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix operator+(const TridiagonalMatrix& A, const TridiagonalMatrix& B)$/;"	f
+operator +=	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix& TridiagonalMatrix::operator+=(TridiagonalMatrix& Matrix_)$/;"	f	class:TridiagonalMatrix
+operator <<	src/TridiagonalMatrix.cpp	/^std::ostream& operator<<(std::ostream &os, const TridiagonalMatrix& TridiagonalMatrix_)$/;"	f
+operator =	src/Matrix.cpp	/^Matrix& Matrix::operator=(const Matrix& matrix_)$/;"	f	class:Matrix
+operator =	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix& TridiagonalMatrix::operator=(const TridiagonalMatrix& rhs)$/;"	f	class:TridiagonalMatrix
+size	src/Matrix.cpp	/^std::tuple<unsigned long, unsigned long> Matrix::size() const$/;"	f	class:Matrix
+size	src/Mesh.cpp	/^unsigned long Mesh::size() const$/;"	f	class:Mesh
+size	src/TridiagonalMatrix.cpp	/^size_t TridiagonalMatrix::size() const$/;"	f	class:TridiagonalMatrix
+solveHeatEquation	src/heatEquation.cpp	/^void solveHeatEquation (double xMin,$/;"	f
+solveTridiagonalSystem	src/solveTridiagonalSystem.cpp	/^void solveTridiagonalSystem(const TridiagonalMatrix& A,$/;"	f
+step	include/Mesh.h	/^        double step;$/;"	m	class:Mesh
+swap	src/Matrix.cpp	/^void swap(Matrix& first, Matrix& second)$/;"	f
+t	src/TridiagonalMatrix.cpp	/^void TridiagonalMatrix::t()$/;"	f	class:TridiagonalMatrix
+upperDiagonal	include/TridiagonalMatrix.h	/^        std::vector<double> upperDiagonal;$/;"	m	class:TridiagonalMatrix
+upperDiagonalElement	src/TridiagonalMatrix.cpp	/^double TridiagonalMatrix::upperDiagonalElement(size_t idx) const$/;"	f	class:TridiagonalMatrix
+upperDiagonalElement	src/TridiagonalMatrix.cpp	/^double& TridiagonalMatrix::upperDiagonalElement(unsigned long idx)$/;"	f	class:TridiagonalMatrix
+v	src/Matrix.cpp	/^std::vector<char> v;$/;"	v
+~Mesh	src/Mesh.cpp	/^Mesh::~Mesh()$/;"	f	class:Mesh
+~TridiagonalMatrix	src/TridiagonalMatrix.cpp	/^TridiagonalMatrix::~TridiagonalMatrix()$/;"	f	class:TridiagonalMatrix
