@@ -1,6 +1,6 @@
 #include <Mesh.h>
 #include <TridiagonalMatrix.h>
-#include <solveTridiagonalSystem.h>
+#include <vector>
 
 void solveHeatEquation (double xMin,
                         double xMax,
@@ -25,10 +25,10 @@ void solveHeatEquation (double xMin,
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
             {
-                A.element(elementNodes[i], elementNodes[j]) += A_loc[j][i];
+				A(elementNodes[i], elementNodes[j]) += A_loc[j][i];
             }
     }
-
+	
     // Assemble rhs vector
     std::vector<double> rhs(NNodes, 0.0);
     std::vector<double> rhs_loc(2, 0.0);
@@ -45,15 +45,13 @@ void solveHeatEquation (double xMin,
     }
 
     // Correct for boundary conditions
-    A.element(0, 0) = 1.0;
-    A.element(0, 1) = 0.0;
-    A.element(NNodes-1, NNodes-2) = 0.0;
-    A.element(NNodes-1, NNodes-1) = 1.0;
+    A(0, 0) = 1.0;
+    A(0, 1) = 0.0;
+    A(NNodes-1, NNodes-2) = 0.0;
+    A(NNodes-1, NNodes-1) = 1.0;
     rhs[0] = 0.0;
     rhs[NNodes-1]= 0.0;
 
-    std::cout << A << std::endl;
-
     // Solve linear system
-    solveTridiagonalSystem(A, rhs, solution);
+    solve(A, rhs, solution);
 }

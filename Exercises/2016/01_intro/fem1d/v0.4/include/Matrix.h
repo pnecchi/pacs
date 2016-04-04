@@ -1,9 +1,20 @@
+//----------------------------------------------------------------------
+// Description: Matrix class for elements of type double
+// Author:      Pierpaolo Necchi
+// Email:       pierpaolo.necchi@gmail.com
+// Date:        lun 04 apr 2016 14:04:17 CEST
+//----------------------------------------------------------------------
+
 #ifndef MATRIX_H
 #define MATRIX_H
 
 #include <tuple>
 #include <vector>
 #include <iostream>
+
+//----------------------------------------------------------------------
+// Base class
+//----------------------------------------------------------------------
 
 class Matrix
 {
@@ -28,13 +39,11 @@ public:
 	unsigned long Ncols() const;
 	
 	// Assignment
-	Matrix& operator=(const Matrix& matrix_);
+	virtual Matrix& operator=(const Matrix& matrix_);
 
 	// Access 
-	std::vector<double>& operator[](unsigned long idx);
-	const std::vector<double>& operator[](unsigned long idx) const;
-	double& operator()(unsigned long rowIdx, unsigned long colIdx);
-	const double& operator()(unsigned long rowIdx, unsigned long colIdx) const;
+	virtual double& operator()(unsigned long rowIdx, unsigned long colIdx);
+	virtual const double& operator()(unsigned long rowIdx, unsigned long colIdx) const;
 
 	// Matrix operations
     Matrix transpose();
@@ -56,11 +65,13 @@ public:
 	Matrix& operator/=(const double& rhs);
 
 	// Matrix-vector multiplication
-	std::vector<double> operator*(const std::vector<double>& rhs) const;
-	
-private:
+	virtual std::vector<double> operator*(const std::vector<double>& rhs) const;
+
+protected:
 	unsigned long nrows;
 	unsigned long ncols;
+
+private:
 	std::vector<std::vector<double>> mat;
 };
 

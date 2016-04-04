@@ -7,7 +7,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix& A)
 {
 	for (unsigned long i = 0; i < A.Nrows(); ++i) {
 		for (unsigned long j = 0; j < A.Ncols(); ++j) {
-			std::cout << A[i][j] << ",";
+			std::cout << A(i,j) << ",";
 		}
 		std::cout << std::endl;
 	}
@@ -83,17 +83,7 @@ void swap(Matrix& first, Matrix& second)
 	swap(first.mat, second.mat);
 }
 
-// Access 
-std::vector<double>& Matrix::operator[](unsigned long idx)
-{
-	return (*this).mat[idx];
-}
-
-const std::vector<double>& Matrix::operator[](unsigned long idx) const
-{
-	return (*this).mat[idx];
-}
-
+// Access
 double& Matrix::operator()(unsigned long rowIdx, unsigned long colIdx)
 {
 	return (*this).mat[rowIdx][colIdx];
@@ -110,7 +100,7 @@ Matrix Matrix::transpose()
 	Matrix result(this->Ncols(), this->Nrows(), 0.0);
 	for (unsigned long i = 0; i < result.Nrows(); ++i) {
 		for (unsigned long j = 0; j < result.Ncols(); ++j) {
-			result[i][j] = (*this)[j][i];
+			result(i,j) = (*this)(j,i);
 		}
 	}
 	return result;
@@ -129,7 +119,7 @@ Matrix& Matrix::operator+=(const Matrix& rhs)
 {
 	for (unsigned long i = 0; i < nrows; ++i) {
 		for (unsigned long j = 0; j < ncols; ++j) {
-			(*this).mat[i][j] += rhs[i][j];
+			(*this)(i,j) += rhs(i,j);
 		}
 	}
 	return *this;
@@ -146,7 +136,7 @@ Matrix& Matrix::operator-=(const Matrix& rhs)
 {
 	for (unsigned long i = 0; i < nrows; ++i) {
 		for (unsigned long j = 0; j < ncols; ++j) {
-			(*this).mat[i][j] -= rhs[i][j];
+			(*this)(i,j) -= rhs(i,j);
 		}
 	}
 	return *this;
@@ -158,7 +148,7 @@ Matrix Matrix::operator*(const Matrix& rhs) const
 	for (unsigned long i = 0; i < result.Nrows(); ++i) {
 		for (unsigned long j = 0; j < result.Ncols(); ++j){
 			for (unsigned long k = 0; k < this->Ncols(); k++) {
-				result[i][j] += (*this).mat[i][k] * rhs[k][j];
+				result(i,j) += (*this)(i,k) * rhs(k,j);
 			}
 		}
 	}
@@ -184,7 +174,7 @@ Matrix& Matrix::operator+=(const double& rhs)
 {
 	for (unsigned long i = 0; i < nrows; ++i) {
 		for (unsigned long j = 0; j < ncols; ++j) {
-			(*this).mat[i][j] += rhs;
+			(*this)(i,j) += rhs;
 		}
 	}
 	return *this;
@@ -201,7 +191,7 @@ Matrix& Matrix::operator-=(const double& rhs)
 {
 	for (unsigned long i = 0; i < nrows; ++i) {
 		for (unsigned long j = 0; j < ncols; ++j) {
-			(*this).mat[i][j] -= rhs;
+			(*this)(i,j) -= rhs;
 		}
 	}
 	return *this;
@@ -218,7 +208,7 @@ Matrix& Matrix::operator*=(const double& rhs)
 {
 	for (unsigned long i = 0; i < nrows; ++i) {
 		for (unsigned long j = 0; j < ncols; ++j) {
-			(*this).mat[i][j] *= rhs;
+			(*this)(i,j) *= rhs;
 		}
 	}
 	return *this;
@@ -235,7 +225,7 @@ Matrix& Matrix::operator/=(const double& rhs)
 {
 	for (unsigned long i = 0; i < nrows; ++i) {
 		for (unsigned long j = 0; j < ncols; ++j) {
-			(*this).mat[i][j] /= rhs;
+			(*this)(i,j) /= rhs;
 		}
 	}
 	return *this;
@@ -247,7 +237,7 @@ std::vector<double> Matrix::operator*(const std::vector<double>& rhs) const
 	std::vector<double> result(this->Nrows(), 0.0);
 	for (unsigned long i = 0; i < result.size(); ++i) {
 		for (unsigned long j = 0; j < this->Ncols(); ++j) {
-			result[i] += (*this)[i][j] * rhs[j];
+			result[i] += (*this)(i,j) * rhs[j];
 		}
 	}
 	return result;

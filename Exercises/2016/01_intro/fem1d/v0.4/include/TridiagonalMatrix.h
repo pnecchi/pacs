@@ -1,3 +1,10 @@
+//----------------------------------------------------------------------
+// Description: Tridiagonal matrix class
+// Author:      Pierpaolo Necchi
+// Email:       pierpaolo.necchi@gmail.com
+// Date:        lun 04 apr 2016 14:21:40 CEST
+//----------------------------------------------------------------------
+
 #ifndef TRIDIAGONALMATRIX_H
 #define TRIDIAGONALMATRIX_H
 
@@ -7,40 +14,44 @@
 class TridiagonalMatrix
 {
     friend std::ostream& operator<<(std::ostream &os, const TridiagonalMatrix& TridiagonalMatrix_);
+	friend void swap(TridiagonalMatrix& first, TridiagonalMatrix& second);
+	friend void solve(const TridiagonalMatrix& A, 
+					  const std::vector<double>& rhs, 
+					  std::vector<double>& sol);
+public:
+	// Constructors
+    TridiagonalMatrix();
+    TridiagonalMatrix(unsigned long N_,
+					  double lowerDiagonalVal_=0.0,
+					  double diagonalVal_=0.0, 
+					  double upperDiagonalVal_=0.0);
+	TridiagonalMatrix(const std::vector<double>& lowerDiagonal_,
+                      const std::vector<double>& diagonal_,
+					  const std::vector<double>& upperDiagonal_);
+    TridiagonalMatrix(const TridiagonalMatrix& matrix_);
 
-    public:
-        // Constructors
-        TridiagonalMatrix();
-        TridiagonalMatrix(unsigned long N_);
-        TridiagonalMatrix(const std::vector<double>& lowerDiagonal_,
-                          const std::vector<double>& diagonal_,
-                          const std::vector<double>& upperDiagonal_);
-        TridiagonalMatrix(const TridiagonalMatrix& other);
+    // Destructor
+	virtual ~TridiagonalMatrix(){};
 
-        // Destructor
-        virtual ~TridiagonalMatrix(){}
+	// Assignment
+	TridiagonalMatrix& operator=(const TridiagonalMatrix& matrix_);
 
-        // Assignment
-        TridiagonalMatrix& operator=(const TridiagonalMatrix& other);
+	// Access 
+	unsigned long size() const;
+	double& operator()(unsigned long rowIdx, unsigned long colIdx);
+	const double& operator()(unsigned long rowIdx, unsigned long colIdx) const;
 
-        // Other methods
-        unsigned long size() const;
-        double element(unsigned long rowIdx, unsigned long colIdx) const;
-        double lowerDiagonalElement(unsigned long idx) const;
-        double diagonalElement(unsigned long idx) const;
-        double upperDiagonalElement(unsigned long idx) const;
-        double& element(unsigned long rowIdx, unsigned long colIdx);
-        double& lowerDiagonalElement(unsigned long idx);
-        double& diagonalElement(unsigned long idx);
-        double& upperDiagonalElement(unsigned long idx);
-
-    private:
-        std::vector<double> lowerDiagonal;
-        std::vector<double> diagonal;
-        std::vector<double> upperDiagonal;
-        unsigned long N;
+private:
+	unsigned long N;
+	std::vector<double> lowerDiagonal;
+	std::vector<double> diagonal;
+    std::vector<double> upperDiagonal;
 };
 
 std::ostream& operator<<(std::ostream &os, const TridiagonalMatrix& TridiagonalMatrix_);
+void swap(TridiagonalMatrix& first, TridiagonalMatrix& second);
+void solve(const TridiagonalMatrix& A, 
+      	   const std::vector<double>& rhs, 
+		   std::vector<double>& sol);
 
 #endif // TRIDIAGONALMATRIX_H
