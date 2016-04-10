@@ -123,10 +123,13 @@ double& TridiagonalMatrix::operator()(unsigned long rowIdx, unsigned long colIdx
 	switch (static_cast<int>(colIdx) - static_cast<int>(rowIdx)) {
 		case (-1):
 			return lowerDiagonal[rowIdx];
+			break;
 		case 0:
 			return diagonal[rowIdx];
+			break;
 		case 1:
 			return upperDiagonal[rowIdx];
+			break;
 		default:
 			return lowerDiagonal[0];
 	}
@@ -137,11 +140,15 @@ const double& TridiagonalMatrix::operator()(unsigned long rowIdx, unsigned long 
 	switch (static_cast<int>(colIdx) - static_cast<int>(rowIdx)) {
 		case (-1):
 			return lowerDiagonal[rowIdx];
+			break;
 		case 0:
 			return diagonal[rowIdx];
+			break;
 		case 1:
 			return upperDiagonal[rowIdx];
+			break;
 		default:
 			return lowerDiagonal[0];
+			break;
 	}
 }
