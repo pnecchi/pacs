@@ -5,6 +5,7 @@
 #include "readParameters.hpp"
 #include "GetPot.hpp"
 #include "gnuplot-iostream.hpp"// interface with gnuplot
+#include "norm.h"
 /*!
   @file main.cpp
   @brief Temperature distribution in a 1D bar.
@@ -44,10 +45,10 @@ int main(int argc, char** argv)
   // check if we want verbosity
   bool verbose=cl.search(1,"-v");
   // Get file with parameter values
-  string filename = cl.follow("parameters.pot","-p");
-  cout<<"Reading parameters from "<<filename<<std::endl;
+  string inputFilename = cl.follow("parameters.pot","-p");
+  cout<<"Reading parameters from "<<inputFilename<<std::endl;
   // read parameters
-  const parameters param=readParameters(filename,verbose);
+  const parameters param=readParameters(inputFilename,verbose);
   // Transfer parameters to local variables
   // I use references to save memory (not really an issue here, it is just
   // to show a possible  use of references)
@@ -61,7 +62,7 @@ int main(int argc, char** argv)
   const auto& Te=param.Te; // External temperature (Centigrades)
   const auto& k=param.k;  // Thermal conductivity
   const auto& hc=param.hc; // Convection coefficient
-  const auto&    M=param.M; // Number of grid elements
+  const auto& M=param.M; // Number of grid elements
   
   //! Precomputed coefficient for adimensional form of equation
   const auto act=2.*(a1+a2)*hc*L*L/(k*a1*a2);
@@ -82,26 +83,42 @@ int main(int argc, char** argv)
   // epsilon=||x^{k+1}-x^{k}||
   // Stopping criteria epsilon<=toler
   
-  int iter=0;
-  double xnew, epsilon;
-     do
-       { epsilon=0.;
+	int iter=0;
+	double xnew=0.0;
+	double epsilon=0.0;
+	std::vector<double> thetaDelta(M+1, 0.0); 
+	do
+    { 
+		// first M-1 row of linear system
+        for(int m=1;m < M;m++)
+        {   
+			xnew  = (theta[m-1]+theta[m+1])/(2.+h*h*act);
+			thetaDelta[m] = xnew - theta[m];
+			theta[m] = xnew;
+		}
+		//Last row
+		xnew = theta[M-1]; 
+		thetaDelta[M] = xnew - theta[M];
+		theta[M] = xnew;
+		
+		// Compute norm of the increment
+		switch (param.normType)
+		{
+			case 0:
+				epsilon = normSup(thetaDelta);
+				break;
+			case 1:
+				epsilon = normH1(thetaDelta, h);
+				break;
+			case 2:
+				epsilon = normL2(thetaDelta, h);
+				break;
+		}
+		
+		// Increment iteration 
+		iter=iter+1;     
 
-	 // first M-1 row of linear system
-         for(int m=1;m < M;m++)
-         {   
-	   xnew  = (theta[m-1]+theta[m+1])/(2.+h*h*act);
-	   epsilon += (xnew-theta[m])*(xnew-theta[m]);
-	   theta[m] = xnew;
-         }
-
-	 //Last row
-	 xnew = theta[M-1]; 
-	 epsilon += (xnew-theta[M])*(xnew-theta[M]);
-	 theta[M]=  xnew; 
-
-	 iter=iter+1;     
-       }while((sqrt(epsilon) > toler) && (iter < itermax) );
+    }while((sqrt(epsilon) > toler) && (iter < itermax) );
 
     if(iter<itermax)
       cout << "M="<<M<<"  Convergence in "<<iter<<" iterations"<<endl;
@@ -112,35 +129,44 @@ int main(int argc, char** argv)
 	status=1;
       }
 
- // Analitic solution
-
+	// Analytic solution
     vector<double> thetaa(M+1);
-     for(int m=0;m <= M;m++)
+    for(int m=0;m <= M;m++)
        thetaa[m]=Te+(To-Te)*cosh(sqrt(act)*(1-m*h))/cosh(sqrt(act));
 
-     // writing results with format
-     // x_i u_h(x_i) u(x_i) and lauch gnuplot 
+	// writing results with format
+	// x_i u_h(x_i) u(x_i) and lauch gnuplot 
 
-     Gnuplot gp;
-     std::vector<double> coor(M+1);
-     std::vector<double> sol(M+1);
-     std::vector<double> exact(M+1);
-
-     cout<<"Result file: result.dat"<<endl;
-     ofstream f("result.dat");
-     for(int m = 0; m<= M; m++)
-       {
-	 // \t writes a tab 
-         f<<m*h*L<<"\t"<<Te*(1.+theta[m])<<"\t"<<thetaa[m]<<endl;
-	 // An example of use of tie and tuples!
-         
-	 std::tie(coor[m],sol[m],exact[m])=
-	   std::make_tuple(m*h*L,Te*(1.+theta[m]),thetaa[m]);
-       }
-     // Using temporary files (another nice use of tie)
-     gp<<"plot"<<gp.file1d(std::tie(coor,sol))<<
-       "w lp title 'uh',"<< gp.file1d(std::tie(coor,exact))<<
-       "w l title 'uex'"<<std::endl;
-     f.close();
-     return status;
+    Gnuplot gp;
+    std::vector<double> coor(M+1);
+    std::vector<double> sol(M+1);
+    std::vector<double> exact(M+1);
+		
+	// Output	
+	if (param.outputMode == 0 || param.outputMode == 2)
+	{
+		cout << "Result file: " << param.resultsFilename << endl;
+		ofstream f(param.resultsFilename);
+		for(int m = 0; m<= M; m++)
+		{
+			f<<m*h*L<<"\t"<<Te*(1.+theta[m])<<"\t"<<thetaa[m]<<endl;
+		}
+		f.close();
+	}
+	if (param.outputMode == 1 || param.outputMode == 2)
+	{
+		// Plot result
+		for(int m = 0; m <= M; ++m)
+		{
+			std::tie(coor[m],sol[m],exact[m])=
+			std::make_tuple(m*h*L,Te*(1.+theta[m]),thetaa[m]);
+		}
+	
+		// Using temporary files (another nice use of tie)
+		gp<<"plot"<<gp.file1d(std::tie(coor,sol))<<
+			"w lp title 'uh',"<< gp.file1d(std::tie(coor,exact))<<
+			"w l title 'uex'"<<std::endl;
+	}
+	
+    return status;
 }

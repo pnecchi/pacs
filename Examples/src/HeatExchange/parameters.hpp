@@ -1,17 +1,18 @@
 #ifndef HH_Parameters_HH
 #define HH_Parameters_HH
 #include <iosfwd>
+#include <string>
 struct parameters
 {
   //! max number of iteration for Gauss-Siedel
-  int   itermax;
+  int itermax;
   //! Tolerance for stopping criterion
-  double  toler;
+  double toler;
   //! Bar length
-   double L;
+  double L;
   //! First longitudinal dimension
   double a1;
- //! Second longitudinal dimension
+  //! Second longitudinal dimension
   double a2;
   //! Dirichlet condition
   double To;
@@ -23,6 +24,13 @@ struct parameters
   double hc;
   //! Number of elements
   int M;
+  //! Norm type
+  int normType; 
+  //! Results filename
+  std::string resultsFilename;
+  //! Output mode
+  int outputMode;
+  
   //! Constructor takes default values
   parameters():
     itermax(1000000),
@@ -34,7 +42,10 @@ struct parameters
     Te(20.),
     k(0.164),
     hc(1.e-6*200.),
-    M(100)
+    M(100), 
+	normType(0),
+	resultsFilename("result.dat"),
+	outputMode(0)
   {}
 };
 //! Prints parameters

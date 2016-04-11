@@ -21,8 +21,8 @@ hc=200.0e-6
 # Number of elements
 M=11
 # Results filename
-resultsFilename=newResult.dat
+resultsFilename=ResultL2.dat
 # Output mode: 0 for file, 1 for screen, 2 for both
-outputMode=1
+outputMode=2
 # Norm used: 0 for sup, 1 for H_1, 2 for L^2
-normType=1
+normType=2
