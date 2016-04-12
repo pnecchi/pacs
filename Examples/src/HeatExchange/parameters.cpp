@@ -15,6 +15,7 @@ std::ostream & operator << (std::ostream & out,const parameters & p)
   out<<"M= "<<p.M<<"\n";
   out<<"normType= "<<p.normType<<"\n";
   out<<"resultsFilename= "<<p.resultsFilename<<"\n";
-  out<<"outputMode= "<<p.outputMode<<"\n\n";
+  out<<"outputMode= "<<p.outputMode<<"\n";
+  out<<"solverType= "<<p.solverType<<"\n\n";
   return out;
 }

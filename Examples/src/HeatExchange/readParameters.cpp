@@ -34,6 +34,7 @@ parameters readParameters(std::string const & filename,bool verbose)
   values.normType=ifile("normType",defaults.normType);
   values.resultsFilename=ifile("resultsFilename",defaults.resultsFilename.c_str());
   values.outputMode=ifile("outputMode", defaults.outputMode);
+  values.solverType=ifile("solverType", defaults.solverType);
   if(verbose)
     {
       std::cout<<"PARAMETER VALUES IN GETPOT FILE"<<"\n";

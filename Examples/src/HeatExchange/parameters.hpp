@@ -30,7 +30,9 @@ struct parameters
   std::string resultsFilename;
   //! Output mode
   int outputMode;
-  
+  //! System solver type
+  int solverType;
+
   //! Constructor takes default values
   parameters():
     itermax(1000000),
@@ -45,7 +47,8 @@ struct parameters
     M(100), 
 	normType(0),
 	resultsFilename("result.dat"),
-	outputMode(0)
+	outputMode(0),
+	solverType(0)
   {}
 };
 //! Prints parameters

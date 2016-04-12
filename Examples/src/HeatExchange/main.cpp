@@ -6,6 +6,7 @@
 #include "GetPot.hpp"
 #include "gnuplot-iostream.hpp"// interface with gnuplot
 #include "norm.h"
+#include "TridiagonalMatrix.h"
 /*!
   @file main.cpp
   @brief Temperature distribution in a 1D bar.
@@ -67,68 +68,89 @@ int main(int argc, char** argv)
   //! Precomputed coefficient for adimensional form of equation
   const auto act=2.*(a1+a2)*hc*L*L/(k*a1*a2);
 
-  // mesh size
-  const auto h=1./M;
+	// mesh size
+	 const auto h=1./M;
   
-  // Solution vector
-  std::vector<double> theta(M+1);
+	// Solution vector
+	std::vector<double> theta(M+1);
   
-  // Gauss Siedel is initialised with a linear variation
-  // of T
+	switch (param.solverType)
+	{
+		case 0:  // Direct solver: Thomas algorithm
+			{  // Brackets create scope for local initialization
+				// Linear system
+				TridiagonalMatrix A(M+1, -1.0, 2.0 + act * h * h, -1.0);
+				std::vector<double> rhs(M+1, 0.0);
+	
+				// Impose boundary conditions 
+				A(0, 0) = 1.0;
+				A(0, 1) = 0.0;
+				A(M, M) = 1.0;
+				rhs[0] = (To - Te) / Te;
+
+				// Solve linear system
+				solve(A, rhs, theta);
+			}
+			break;
+		case 1:  // Iterative solver: Gauss-Seidel algorithm
+			{
+				// Gauss Siedel is initialised with a linear variation of T
+				for(unsigned int m=0;m <= M;++m)
+					theta[m]=(1.-m*h)*(To-Te)/Te;
   
-  for(unsigned int m=0;m <= M;++m)
-     theta[m]=(1.-m*h)*(To-Te)/Te;
-  
-  // Gauss-Seidel
-  // epsilon=||x^{k+1}-x^{k}||
-  // Stopping criteria epsilon<=toler
-  
-	int iter=0;
-	double xnew=0.0;
-	double epsilon=0.0;
-	std::vector<double> thetaDelta(M+1, 0.0); 
-	do
-    { 
-		// first M-1 row of linear system
-        for(int m=1;m < M;m++)
-        {   
-			xnew  = (theta[m-1]+theta[m+1])/(2.+h*h*act);
-			thetaDelta[m] = xnew - theta[m];
-			theta[m] = xnew;
-		}
-		//Last row
-		xnew = theta[M-1]; 
-		thetaDelta[M] = xnew - theta[M];
-		theta[M] = xnew;
+				// Gauss-Seidel
+				// epsilon=||x^{k+1}-x^{k}||
+				// Stopping criteria epsilon<=toler
+				int iter=0;
+				double xnew=0.0;
+				double epsilon=0.0;
+				std::vector<double> thetaDelta(M+1, 0.0); 
+				do
+				{ 
+					// first M-1 row of linear system
+					for(int m=1;m < M;m++)
+					{   
+						xnew  = (theta[m-1]+theta[m+1])/(2.+h*h*act);
+						thetaDelta[m] = xnew - theta[m];
+						theta[m] = xnew;
+					}
+				
+					//Last row
+					xnew = theta[M-1]; 
+					thetaDelta[M] = xnew - theta[M];
+					theta[M] = xnew;
 		
-		// Compute norm of the increment
-		switch (param.normType)
-		{
-			case 0:
-				epsilon = normSup(thetaDelta);
-				break;
-			case 1:
-				epsilon = normH1(thetaDelta, h);
-				break;
-			case 2:
-				epsilon = normL2(thetaDelta, h);
-				break;
-		}
+					// Compute norm of the increment
+					switch (param.normType)
+					{
+						case 0:
+							epsilon = normSup(thetaDelta);
+							break;
+						case 1:
+							epsilon = normH1(thetaDelta, h);
+							break;
+						case 2:
+							epsilon = normL2(thetaDelta, h);
+							break;
+					}
 		
-		// Increment iteration 
-		iter=iter+1;     
+					// Increment iteration 
+					iter=iter+1;     
 
-    }while((sqrt(epsilon) > toler) && (iter < itermax) );
-
-    if(iter<itermax)
-      cout << "M="<<M<<"  Convergence in "<<iter<<" iterations"<<endl;
-    else
-      {
-	cerr << "NOT CONVERGING in "<<itermax<<" iterations "<<
-	  "||dx||="<<sqrt(epsilon)<<endl;
-	status=1;
-      }
-
+				}while((sqrt(epsilon) > toler) && (iter < itermax) );
+	
+				if(iter<itermax)
+					cout << "M="<<M<<"  Convergence in "<<iter<<" iterations"<<endl;
+				else
+				{
+					cerr << "NOT CONVERGING in "<<itermax<<" iterations "<<
+							"||dx||="<<sqrt(epsilon)<<endl;
+					status=1;
+				}
+			}
+			break;
+	}  /* end switch (param.solverType) */
+  
 	// Analytic solution
     vector<double> thetaa(M+1);
     for(int m=0;m <= M;m++)

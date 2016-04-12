@@ -24,5 +24,8 @@ M=11
 resultsFilename=newResult.dat
 # Output mode: 0 for file, 1 for screen, 2 for both
 outputMode=1
-# Norm used: 0 for sup, 1 for H_1, 2 for L^2
+# System solver type: 0 for direct, 1 for iteraitve
+solverType=0
+# Norm used for convergence test in iterative method
+# 0 for sup, 1 for H_1, 2 for L^2
 normType=1
