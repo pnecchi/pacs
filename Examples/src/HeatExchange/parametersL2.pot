@@ -1,28 +1,70 @@
-# Max number of grid elements
-MMAX=501
-# max number of iteration for Gauss-Siedel
-itermax=1000000
-# Tolerance for stopping criterion
-toler=1.0e-8
+#################################################
+# Type of problem: Stationary vs Non-Stationary #
+#################################################
+
+# 0 for stationary, 1 for non-stationary problem
+stationary=0
+
+#######################
+# Physical parameters #
+#######################
+
 # Bar length
 L=40.
 # First longitudinal dimension
-a1=4.
+a1=1.
 # Second longitudinal dimension
-a2=50.
+a2=1.
+# Initial temperature (for non-stationary problem)
+Ti=0.
 # Dirichlet condition
 To=46.
 # External temperature 
 Te=20.
+# Density (for non-stationary problem)
+rho=5.
+# Heat capacity (for non-stationary problem)
+Cp=1.
 # Conductivity
 k=0.164
 # Convection coefficient
 hc=200.0e-6
-# Number of elements
-M=11
-# Results filename
-resultsFilename=ResultL2.dat
+# Final time (for non-stationary problem)
+T=1000.0
+
+#############################
+# Discretization parameters #
+#############################
+
+# Max number of grid elements
+MMAX=501
+# Max number of time grid elements
+NMAX=501
+# Number of intervals in space discretization
+M=100
+# Number of intervals in time discretization
+N=100
+
+######################################
+# System solver: direct vs iterative #
+######################################
+
+# System solver type: 0 for direct, 1 for iteraitve
+solverType=1
+# max number of iteration for Gauss-Siedel
+itermax=1000000
+# Tolerance for stopping criterion
+toler=1.0e-8
+# Norm used for convergence test in iterative method
+# 0 for sup, 1 for H_1, 2 for L^2
+normType=2
+
+##########
+# Output #
+##########
+
 # Output mode: 0 for file, 1 for screen, 2 for both
 outputMode=2
-# Norm used: 0 for sup, 1 for H_1, 2 for L^2
-normType=2
+# Results filename
+resultsFilename=ResultL2.dat
+

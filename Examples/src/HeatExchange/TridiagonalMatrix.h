@@ -41,6 +41,9 @@ public:
 	double& operator()(unsigned long rowIdx, unsigned long colIdx);
 	const double& operator()(unsigned long rowIdx, unsigned long colIdx) const;
 
+	// Matrix-vector product
+	std::vector<double> operator*(std::vector<double> const &rhs) const;
+
 private:
 	unsigned long N;
 	std::vector<double> lowerDiagonal;

@@ -152,3 +152,26 @@ const double& TridiagonalMatrix::operator()(unsigned long rowIdx, unsigned long 
 			break;
 	}
 }
+
+std::vector<double> TridiagonalMatrix::operator*(std::vector<double> const &rhs) const
+{
+	std::vector<double> result(N, 0.0);
+
+	// First line
+	result[0] = diagonal[0] * rhs[0] 
+				+ upperDiagonal[0] * rhs[1];
+	
+	// Last line
+	result[N-1] = lowerDiagonal[N-1] * rhs[N-2] 
+				  + diagonal[N-1] * rhs[N-1];
+
+	// Other lines
+	for(size_t i = 0; i < N; ++i)
+	{
+		result[i] = lowerDiagonal[i] * rhs[i-1] 
+					+ diagonal[i] * rhs[i] 
+					+ upperDiagonal[i] * rhs[i+1];
+	}
+
+	return result;
+}
