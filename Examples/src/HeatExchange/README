@@ -1,6 +1,6 @@
-
 Little example of a program that computes the temperature in a bar solving
-the 1D heat equation with a Gauss-Siedel  iteration. 
+the steady or unsteady 1D heat equation with a Gauss-Siedel iteration or 
+Thomas algorithm. 
 
 Taken and adapted from "Simulation numerique an C++" of I. Danaila, F. Hecht e
    O. Pironneau, 2005
@@ -8,3 +8,8 @@ Taken and adapted from "Simulation numerique an C++" of I. Danaila, F. Hecht e
 Using gnuplot plot.gnu you ara eble to visualize the results.
 
 make heat_exchange.pdf produce a file with the description of the example.
+
+To execute the code asked in the Challenge:
+make 
+./run.py
+

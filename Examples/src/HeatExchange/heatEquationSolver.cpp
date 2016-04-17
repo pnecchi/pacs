@@ -5,6 +5,11 @@
 #include "TridiagonalMatrix.h"
 #include <iostream>
 
+/*! \fn void stationaryHeatEquationSolver(parameters const &param) 
+ *  \brief Procedure that solves the steady heat equation in a bar.
+ *  \param param The problem parameters 
+ */
+
 void stationaryHeatEquationSolver(parameters const &param)
 {
 	// Read parameters
@@ -143,6 +148,10 @@ void stationaryHeatEquationSolver(parameters const &param)
 }
 
 
+/*! \fn void nonStationaryHeatEquationSolver(parameters const &param) 
+ *  \brief Procedure that solves the non-steady heat equation in a bar.
+ *  \param param The problem parameters 
+ */
 
 void nonStationaryHeatEquationSolver(parameters const &param)
 {
