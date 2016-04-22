@@ -38,9 +38,16 @@
  
 #include <iostream>
 #include "Grid.h"
+#include "Edge.h"
 
 int main()
 {
+	Edge e1(10, 5);
+	Edge e2(5, 10);
+	std::cout << "e1: " << e1.first << " -- " << e1.second << std::endl;
+	std::cout << "e2: " << e2.first << " -- " << e2.second << std::endl;
+	std::cout << "e1 == e2? " << (e1 == e2) << std::endl;
+	
 	std::string filename = "mesh.dat";
 	Grid grid(filename);
 	std::cout << "----------------------------------------------" << std::endl;

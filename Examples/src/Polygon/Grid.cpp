@@ -3,6 +3,7 @@
 #include <sstream>  /* std::ifstream */
 #include <fstream>  /* std::istringstream */
 #include <iostream> 
+#include <set>
 
 std::ostream& operator<<(std::ostream &os, const Grid& grid)
 {
@@ -16,10 +17,24 @@ std::ostream& operator<<(std::ostream &os, const Grid& grid)
 
 	// Print polygons
 	os << "Polygons:" << std::endl;
-	for(auto const &i : grid.polygonVec)
+	for(auto const &i : grid.polygons)
 	{
 		i->showMe();
-	}	
+	}
+
+	// Print edges 
+	os << "Edges:" << std::endl;
+	for(auto const &i : grid.edges)
+	{
+		os << i.first << " -- " << i.second << std::endl;
+	}
+
+	// Print boundary
+	os << "Boundary:" << std::endl;
+	for(auto const &i : grid.edges)
+	{
+		os << i.first << " -- " << i.second << std::endl;
+	}
 	return os;
 }
 
@@ -40,7 +55,7 @@ Grid::Grid(const std::string &filename)
 	
 	// Resize vector of vertices and of polygons
 	vertices.resize(NPoints);
-	polygonVec.reserve(NPolygons);
+	polygons.reserve(NPolygons);
 	
 	// Read vertices 
 	int idx = 0;
@@ -57,6 +72,9 @@ Grid::Grid(const std::string &filename)
 	int polygonType = 0;
 	int idxVertex = 0; 
 	Geometry::Vertices polygonVertices; 
+	std::set<Edge> setEdges;
+	std::set<Edge> setBoundaryEdges; 
+	
 	for(size_t i = 0; i < NPolygons && getline(ifs, line); ++i)
 	{
 		polygonVertices.resize(0);  // Reset vertices to empty vector
@@ -75,13 +93,13 @@ Grid::Grid(const std::string &filename)
 		switch (polygonType) 
 		{
 			case 0:  // Triangle
-				polygonVec.emplace_back(new Geometry::Triangle(polygonVertices)); 
+				polygons.emplace_back(new Geometry::Triangle(polygonVertices)); 
 				break;
 			case 1:  // Square
-				polygonVec.emplace_back(new Geometry::Square(polygonVertices)); 
+				polygons.emplace_back(new Geometry::Square(polygonVertices)); 
 				break;
 			case 2:  // Generic polygon
-				polygonVec.emplace_back(new Geometry::Polygon(polygonVertices));
+				polygons.emplace_back(new Geometry::Polygon(polygonVertices));
 				break;
 		}
 	}
@@ -91,7 +109,7 @@ Grid::Grid(const std::string &filename)
 double Grid::area() const
 {
 	double totArea = 0.0;
-	for (auto const &i : polygonVec)
+	for (auto const &i : polygons)
 	{
 		totArea += i->area();
 	}

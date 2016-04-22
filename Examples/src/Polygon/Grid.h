@@ -13,6 +13,7 @@
 #include <string>
 #include <memory>
 #include "Polygon.hpp"
+#include "Edge.h"
 
 /** \class Grid
  *	\brief Grid is a set of vertices which form a set of polygons. 
@@ -44,14 +45,16 @@ public:
 
 	// Size
 	size_t nVertices() const { return vertices.size(); }
-	size_t nPolygons() const { return polygonVec.size(); }
+	size_t nPolygons() const { return polygons.size(); }
 
 	// Grid area
 	double area() const; 
 
 private:
 	std::vector<Geometry::Point2D> vertices;
-	std::vector<std::shared_ptr<Geometry::AbstractPolygon>> polygonVec;
+	std::vector<std::shared_ptr<Geometry::AbstractPolygon>> polygons;
+	std::vector<Edge> edges;
+	std::vector<Edge> boundary;
 };
 
 // Friend functions declaration
