@@ -86,3 +86,14 @@ Grid::Grid(const std::string &filename)
 		}
 	}
 }
+
+
+double Grid::area() const
+{
+	double totArea = 0.0;
+	for (auto const &i : polygonVec)
+	{
+		totArea += i->area();
+	}
+	return totArea;
+}

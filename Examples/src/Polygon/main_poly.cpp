@@ -43,6 +43,9 @@ int main()
 {
 	std::string filename = "mesh.dat";
 	Grid grid(filename);
+	std::cout << "----------------------------------------------" << std::endl;
 	std::cout << grid << std::endl;
+	std::cout << "----------------------------------------------" << std::endl;
+	std::cout << "Grid area: " << grid.area() << std::endl;	
 	return 0;
 }

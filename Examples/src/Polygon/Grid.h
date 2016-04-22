@@ -46,6 +46,9 @@ public:
 	size_t nVertices() const { return vertices.size(); }
 	size_t nPolygons() const { return polygonVec.size(); }
 
+	// Grid area
+	double area() const; 
+
 private:
 	std::vector<Geometry::Point2D> vertices;
 	std::vector<std::shared_ptr<Geometry::AbstractPolygon>> polygonVec;
