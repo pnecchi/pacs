@@ -1,0 +1,52 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+.DEFAULT_GOAL	Makefile	/^.DEFAULT_GOAL = all$/;"	m
+.phony	Makefile	/^.phony= all clean distclean doc$/;"	m
+AbstractPolygon	Polygon.cpp	/^  AbstractPolygon::AbstractPolygon(Vertices const & v, bool check):vertexes(v)$/;"	f	class:Geometry::AbstractPolygon
+AbstractPolygon	Polygon.hpp	/^  class AbstractPolygon$/;"	c	namespace:Geometry
+EXEC	Makefile	/^EXEC=$(exe_sources:.cpp=)$/;"	m
+Geometry	Polygon.cpp	/^namespace Geometry{$/;"	n	file:
+Geometry	Polygon.hpp	/^namespace Geometry$/;"	n
+HEADERS	Makefile	/^HEADERS=$(wildcard *.hpp)$/;"	m
+HH_POLYGON_HH	Polygon.hpp	2;"	d
+MAKEFILEH_DIR	Makefile	/^MAKEFILEH_DIR=..\/..\/$/;"	m
+OBJS	Makefile	/^OBJS = $(SRCS:.cpp=.o)$/;"	m
+Point2D	Polygon.hpp	/^    Point2D(double xx=0.0, double yy=0.0):coor{{xx,yy}}{}$/;"	f	class:Geometry::Point2D
+Point2D	Polygon.hpp	/^  class Point2D$/;"	c	namespace:Geometry
+Polygon	Polygon.cpp	/^  Polygon::Polygon(Vertices const & v): AbstractPolygon(v) {}$/;"	f	class:Geometry::Polygon
+Polygon	Polygon.hpp	/^  class Polygon: public AbstractPolygon$/;"	c	namespace:Geometry
+SRCS	Makefile	/^SRCS=$(wildcard *.cpp)$/;"	m
+Square	Polygon.cpp	/^  Square::Square(Point2D origin, double length, double angle){$/;"	f	class:Geometry::Square
+Square	Polygon.cpp	/^  Square::Square(Vertices const & v): AbstractPolygon(v,false) $/;"	f	class:Geometry::Square
+Triangle	Polygon.cpp	/^  Triangle::Triangle(Vertices const & v):AbstractPolygon(v,false){$/;"	f	class:Geometry::Triangle
+area	Polygon.cpp	/^  double Polygon::area() const{$/;"	f	class:Geometry::Polygon
+area	Polygon.cpp	/^  double Square::area() const{$/;"	f	class:Geometry::Square
+area	Polygon.cpp	/^  double Triangle::area() const$/;"	f	class:Geometry::Triangle
+checkConvexity	Polygon.cpp	/^  void AbstractPolygon::checkConvexity()$/;"	f	class:Geometry::AbstractPolygon
+coor	Polygon.hpp	/^    std::array<double,2> coor;$/;"	m	class:Geometry::Point2D
+distance	Polygon.cpp	/^  double distance(Point2D const & a, Point2D const & b){$/;"	f	namespace:Geometry
+exe_sources	Makefile	/^exe_sources=$(filter main%.cpp,$(SRCS))$/;"	m
+final	Polygon.hpp	/^  class Square final: public AbstractPolygon$/;"	c	namespace:Geometry
+final	Polygon.hpp	/^  class Triangle final: public AbstractPolygon$/;"	c	namespace:Geometry
+get	Polygon.hpp	/^    std::array<double,2> get() const { return coor;}$/;"	f	class:Geometry::Point2D
+isConvex	Polygon.hpp	/^    bool isConvex() const {return isconvex;}$/;"	f	class:Geometry::AbstractPolygon
+isconvex	Polygon.hpp	/^    bool isconvex;$/;"	m	class:Geometry::AbstractPolygon
+main	main_poly.cpp	/^int main()$/;"	f
+operator +	Polygon.hpp	/^  inline Point2D operator + (Point2D const & a, Point2D const & b){$/;"	f	namespace:Geometry
+operator -	Polygon.hpp	/^  inline Point2D operator - (Point2D const & a, Point2D const & b){$/;"	f	namespace:Geometry
+set	Polygon.hpp	/^    void set(double const &xx, double const &yy)$/;"	f	class:Geometry::Point2D
+showMe	Polygon.cpp	/^  void AbstractPolygon::showMe(std::ostream & out)const$/;"	f	class:Geometry::AbstractPolygon
+showMe	Polygon.cpp	/^  void Polygon::showMe(std::ostream & out)const$/;"	f	class:Geometry::Polygon
+showMe	Polygon.cpp	/^  void Square::showMe(std::ostream & out) const$/;"	f	class:Geometry::Square
+showMe	Polygon.cpp	/^  void Triangle::showMe(std::ostream & out) const{$/;"	f	class:Geometry::Triangle
+size	Polygon.hpp	/^    Vertices::size_type size() const {return vertexes.size();}$/;"	f	class:Geometry::AbstractPolygon
+theVertices	Polygon.hpp	/^    Vertices const & theVertices()const {return vertexes;}$/;"	f	class:Geometry::AbstractPolygon
+vertexes	Polygon.hpp	/^    Vertices vertexes;$/;"	m	class:Geometry::AbstractPolygon
+x	Polygon.hpp	/^    double x() const {return coor[0];}$/;"	f	class:Geometry::Point2D
+y	Polygon.hpp	/^    double y() const {return coor[1];}$/;"	f	class:Geometry::Point2D
+~AbstractPolygon	Polygon.hpp	/^    virtual ~AbstractPolygon(){};$/;"	f	class:Geometry::AbstractPolygon
+~Polygon	Polygon.hpp	/^    virtual ~Polygon(){};$/;"	f	class:Geometry::Polygon
