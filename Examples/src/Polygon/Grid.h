@@ -22,7 +22,7 @@ class Grid
 {
 
 	friend std::ostream& operator<<(std::ostream &os, const Grid& grid);
-
+		
 public:
 	// Constructor
 	Grid()=default;
@@ -47,16 +47,27 @@ public:
 	size_t nVertices() const { return vertices.size(); }
 	size_t nPolygons() const { return polygons.size(); }
 	size_t nEdges() const { return edges.size(); }
-	size_t nBoundaryEdges() const { return boundary.size(); }
+	size_t nInternalEdges() const { return internalEdges.size(); }
+	size_t nBoundaryEdges() const { return boundaryEdges.size(); }
 
-	// Grid area
+	/** 
+	 *	Grid area
+	 *  Computes the total area of the grid. 
+	 */
 	double area() const; 
+
+	/** 
+	 *	Output the edges, internalEdges and boundaryEdges to three different
+	 *	files.
+	 */
+	void outputEdges() const;
 
 private:
 	std::vector<Geometry::Point2D> vertices;
 	std::vector<std::shared_ptr<Geometry::AbstractPolygon>> polygons;
 	std::vector<Edge> edges;
-	std::vector<Edge> boundary;
+	std::vector<Edge> internalEdges;
+	std::vector<Edge> boundaryEdges;
 };
 
 // Friend functions declaration

@@ -42,17 +42,21 @@
 
 int main()
 {
-	Edge e1(10, 5);
-	Edge e2(5, 10);
-	std::cout << "e1: " << e1.first << " -- " << e1.second << std::endl;
-	std::cout << "e2: " << e2.first << " -- " << e2.second << std::endl;
-	std::cout << "e1 == e2? " << (e1 == e2) << std::endl;
-	
+	// Read grid from file
 	std::string filename = "mesh.dat";
+	std::cout << ">> Read grid from " << filename << std::endl;
 	Grid grid(filename);
-	std::cout << "----------------------------------------------" << std::endl;
+	
+	// Output grid to terminal
+	std::cout << ">> Output grid" << std::endl;
 	std::cout << grid << std::endl;
-	std::cout << "----------------------------------------------" << std::endl;
-	std::cout << "Grid area: " << grid.area() << std::endl;	
+	
+	// Compute grid total area
+	std::cout << ">> Grid area: " << grid.area() << std::endl;	
+	
+	// Output edges to file
+	std::cout << ">> Print edges to file" << std::endl;
+	grid.outputEdges();
+
 	return 0;
 }

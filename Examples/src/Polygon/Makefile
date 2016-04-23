@@ -46,6 +46,7 @@ all: $(DEPEND) $(EXEC)
 
 clean:
 	$(RM) -f $(EXEC) $(OBJS)
+	$(RM) edges.dat internal_edges.dat boundary_edges.dat	
 
 distclean:
 	$(MAKE) clean

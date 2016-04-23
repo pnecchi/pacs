@@ -34,7 +34,7 @@ std::ostream& operator<<(std::ostream &os, const Grid& grid)
 
 	// Print boundary
 	os << "Boundary:" << std::endl;
-	for(auto const &i : grid.boundary)
+	for(auto const &i : grid.boundaryEdges)
 	{
 		os << i.first << " -- " << i.second << std::endl;
 	}
@@ -77,7 +77,7 @@ Grid::Grid(const std::string &filename)
 	Geometry::Vertices polygonVertices; 
 	std::vector<unsigned int> idxVerticesVec;
 	std::set<Edge> setEdges;
-	std::set<Edge> setNonBoundaryEdges; 
+	std::set<Edge> setInternalEdges; 
 	std::pair<std::set<Edge>::iterator, bool> ret;
 
 	for(size_t i = 0; i < NPolygons && getline(ifs, line); ++i)
@@ -123,7 +123,7 @@ Grid::Grid(const std::string &filename)
 
 			if (!ret.second) // Edge does not belong to the boundary
 			{
-				setNonBoundaryEdges.insert(edge);
+				setInternalEdges.insert(edge);
 			}
 		}
 	}
@@ -131,14 +131,16 @@ Grid::Grid(const std::string &filename)
 	// Compute boundary edges by set difference
 	std::set<Edge> setBoundaryEdges;
 	std::set_difference(setEdges.begin(), setEdges.end(),
-						setNonBoundaryEdges.begin(), setNonBoundaryEdges.end(),
+						setInternalEdges.begin(), setInternalEdges.end(),
 						std::inserter(setBoundaryEdges, setBoundaryEdges.end()));
 
 	// Convert sets to vectors
 	edges.resize(setEdges.size());
-	boundary.resize(setBoundaryEdges.size());
+	internalEdges.resize(setInternalEdges.size());
+	boundaryEdges.resize(setBoundaryEdges.size());
 	std::copy(setEdges.begin(), setEdges.end(), edges.begin());
-	std::copy(setBoundaryEdges.begin(), setBoundaryEdges.end(), boundary.begin());					
+	std::copy(setInternalEdges.begin(), setInternalEdges.end(), internalEdges.begin());					
+	std::copy(setBoundaryEdges.begin(), setBoundaryEdges.end(), boundaryEdges.begin());					
 }
 
 
@@ -150,4 +152,31 @@ double Grid::area() const
 		totArea += i->area();
 	}
 	return totArea;
+}
+
+
+void Grid::outputEdges() const 
+{
+	// Initialize file output streams
+	std::ofstream ofsEdges("edges.dat");
+	std::ofstream ofsInternalEdges("internal_edges.dat");
+	std::ofstream ofsBoundaryEdges("boundary_edges.dat");
+	
+	// Print edges to file
+	for (const Edge& e : edges)
+	{
+		ofsEdges << e.first << " " << e.second << std::endl;
+	}
+
+	// Print internal edges to file
+	for (const Edge& e : internalEdges)
+	{
+		ofsInternalEdges << e.first << " " << e.second << std::endl;
+	}
+
+	// Print boundary edges to file
+	for (const Edge& e : boundaryEdges)
+	{
+		ofsBoundaryEdges << e.first << " " << e.second << std::endl;
+	}
 }
