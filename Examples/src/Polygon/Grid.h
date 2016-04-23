@@ -46,6 +46,8 @@ public:
 	// Size
 	size_t nVertices() const { return vertices.size(); }
 	size_t nPolygons() const { return polygons.size(); }
+	size_t nEdges() const { return edges.size(); }
+	size_t nBoundaryEdges() const { return boundary.size(); }
 
 	// Grid area
 	double area() const; 
