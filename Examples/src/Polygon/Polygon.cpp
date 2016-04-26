@@ -17,11 +17,23 @@ namespace Geometry{
   }
   // ********************* BASE CLASS **********************
   
-  AbstractPolygon::AbstractPolygon(Vertices const & v, bool check):vertexes(v)
+  AbstractPolygon::AbstractPolygon(Vertices const *verticesPtr_, VerticesIdx const &verticesIdx_, bool check)
+	  : verticesPtr(verticesPtr_), 
+	    verticesIdx(verticesIdx_)
   {
     if (check) this->checkConvexity();
   }
-  
+
+  Vertices const AbstractPolygon::theVertices() const
+  {
+	Vertices polygonVertices(verticesIdx.size());
+	for(size_t i = 0; i < verticesIdx.size(); ++i)
+	{
+		polygonVertices.push_back((*verticesPtr)[verticesIdx[i]]);
+	}
+	return polygonVertices;
+  }
+
   void AbstractPolygon::showMe(std::ostream & out)const
   {
     if (this->size()==0){
@@ -29,9 +41,13 @@ namespace Geometry{
     }
     else {
       out<<"Vertices:"<<std::endl;
-      out<<"    X     " << "   Y    "<<std::endl;
-      for (auto const & i : this->vertexes)
-	out<<i.x()<<" " << i.y()<<std::endl;
+      out<<"X\tY" <<std::endl;
+	  for(size_t i = 0; i < verticesIdx.size(); ++i)
+	  {
+		unsigned int idx = verticesIdx[i];
+		out << (*verticesPtr)[idx].x() << "\t" 
+			<< (*verticesPtr)[idx].y() << std::endl; 
+	  }	
     }
     if(this->isconvex) std::cout<<" Polygon is convex"<<std::endl;
     else std::cout<<" Polygon is not convex"<<std::endl;
@@ -39,7 +55,7 @@ namespace Geometry{
   
   void AbstractPolygon::checkConvexity()
   {
-    Vertices const & myV(this->vertexes);
+	Vertices const & myV(this->theVertices());
     auto mysize=this->size();
     // We consider segments and triangles as convex
     if (mysize <= 3) {
@@ -86,9 +102,10 @@ namespace Geometry{
   
   // ****   POLYGON
   
-  Polygon::Polygon(Vertices const & v): AbstractPolygon(v) {}
-  
-  
+  Polygon::Polygon(Vertices const *verticesPtr_, VerticesIdx const &verticesIdx_)
+	: AbstractPolygon(verticesPtr_, verticesIdx_) 
+  {}
+   
   //! To compute the area of a polygon we use the divergence theorem.
   /*!
     \f$ int_P d\Omega = 1/2 \int{\partial P} xn_x d\gamma\f$
@@ -98,7 +115,7 @@ namespace Geometry{
     auto siz=this->size();
     if (siz<3) return 0;
     double result(0);
-    Vertices const & Ver(this->vertexes);
+    Vertices const Ver(this->theVertices());
     // I am using C++11 sintax. decltype(expr) returns the
     // type of the expression expr. (I could have used Vertices::size_type, 
     // or just int, here I wanted to show some features of the new standard).
@@ -121,32 +138,21 @@ namespace Geometry{
   }
 
   // ********************* SQUARE **********************
-  Square::Square(Vertices const & v): AbstractPolygon(v,false) 
+  Square::Square(Vertices const *verticesPtr_, VerticesIdx const &verticesIdx_)
+	  : AbstractPolygon(verticesPtr_, verticesIdx_, false) 
   {
     this->isconvex=true;
-    if(v.size() != 4){
+    if(verticesIdx_.size() != 4){
       throw std::runtime_error(" A square must be created giving four vertices");
     }
     // Check if it is a square!
-    double l1=distance(vertexes[1],vertexes[0]);
-    double l2=distance(vertexes[2],vertexes[3]);
+    double l1=distance((*verticesPtr)[verticesIdx[1]],
+					   (*verticesPtr)[verticesIdx[2]]);
+    double l2=distance((*verticesPtr)[verticesIdx[2]],
+					   (*verticesPtr)[verticesIdx[3]]);
     auto ratio=std::abs(this->area())/(l1*l2);
     if (std::abs(ratio - 1.0)>10*std::numeric_limits<double>::epsilon())
       throw std::runtime_error("Vertexes do not define a square");
-  }
-
-  Square::Square(Point2D origin, double length, double angle){
-    this->isconvex=true;
-    this->vertexes.reserve(4);
-    vertexes.push_back(origin);
-    double c(std::cos(angle));
-    double s(std::sin(angle));
-    vertexes.push_back(Point2D(origin.x()+length*c,
-			       origin.y()+length*s));
-    vertexes.push_back(Point2D(origin.x()+length*(c-s),
-			       origin.y()+length*(c+s)));
-    vertexes.push_back(Point2D(origin.x()-length*s,
-			       origin.y()+length*c));
   }
   
   double Square::area() const{
@@ -154,8 +160,8 @@ namespace Geometry{
     // I want the area with sign, positive if the quad is 
     // oriented counterclockwise. So the easiest thing is to use the 
     // formula using cross product (even if it is not the most efficient choice)
-    Point2D v(this->vertexes[1]-this->vertexes[0]);
-    Point2D w(this->vertexes[2]-this->vertexes[0]);
+    Point2D v((*verticesPtr)[verticesIdx[1]]-(*verticesPtr)[verticesIdx[0]]);
+    Point2D w((*verticesPtr)[verticesIdx[2]]-(*verticesPtr)[verticesIdx[0]]);
     // area = v \times w. Positive if square counterclockwise oriented
     return v.x()*w.y()-v.y()*w.x();
     ;}
@@ -169,7 +175,8 @@ namespace Geometry{
   
   //********************* TRIANGLE **********************
   
-  Triangle::Triangle(Vertices const & v):AbstractPolygon(v,false){
+  Triangle::Triangle(Vertices const *verticesPtr_, VerticesIdx const &verticesIdx_)
+	  :AbstractPolygon(verticesPtr_, verticesIdx_, false){
     this->isconvex=true;    
     // Check if we give 3 vertices
     // We may use assert, in this case we would disable the control
@@ -185,8 +192,8 @@ namespace Geometry{
     if(this->size()==0) return 0.0;
     // I use the cross product since this is a 
     // signed area!
-    Point2D v(this->vertexes[1]-this->vertexes[0]);
-    Point2D w(this->vertexes[2]-this->vertexes[0]);
+    Point2D v((*verticesPtr)[verticesIdx[1]]-(*verticesPtr)[verticesIdx[0]]);
+    Point2D w((*verticesPtr)[verticesIdx[2]]-(*verticesPtr)[verticesIdx[0]]);
     // area = 0.5* v \times w. Positive if triangle counterclockwise oriented
     return 0.5*(v.x()*w.y()-v.y()*w.x());
     ;}

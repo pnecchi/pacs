@@ -63,7 +63,7 @@ public:
 	void outputEdges() const;
 
 private:
-	std::vector<Geometry::Point2D> vertices;
+	Geometry::Vertices vertices;
 	std::vector<std::shared_ptr<Geometry::AbstractPolygon>> polygons;
 	std::vector<Edge> edges;
 	std::vector<Edge> internalEdges;

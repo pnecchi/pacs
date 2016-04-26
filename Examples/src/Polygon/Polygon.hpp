@@ -79,15 +79,18 @@ namespace Geometry
   //! Polygon vertices are just vectors of points.
   using Vertices=std::vector<Point2D>;
 
+  //! Polygon vertices indices are just a vector of unsigned int	
+  using VerticesIdx = std::vector<unsigned int>;
+
   //! Defines the common interface of polygons.
   class AbstractPolygon
   {
   public:
-    //! Constructor taking vertices
+    //! Constructor taking pointer to vertices and vertices indices
     /*! 
       It checks convexity if check=true
      */
-    AbstractPolygon(Vertices const & v, bool check=true);
+    AbstractPolygon(Vertices const *verticesPtr_, VerticesIdx const &verticesIdx_, bool check=true);
     //! Default constructor is defaulted
     /*! 
       It is up to the derived classes to fill the vertexex and other info correctly
@@ -111,11 +114,13 @@ namespace Geometry
       guaranteed to be an integral type, more precisely
       a type convertible to unsigned int).
     */
-    Vertices::size_type size() const {return vertexes.size();}
+    Vertices::size_type size() const {return verticesIdx.size();}
     //! Is the polygon convex?
     bool isConvex() const {return isconvex;}
     //! Returns the vertices (read only)
-    Vertices const & theVertices()const {return vertexes;}
+    Vertices const theVertices() const;
+	//! Return the vertices indices (read only)
+	VerticesIdx const & theVerticesIdx() const {return verticesIdx;}
     //! Outputs some info on the polygon
     virtual void showMe(std::ostream & out=std::cout) const;
     //! The area of the polygon (with sign!).
@@ -125,8 +130,10 @@ namespace Geometry
     */
     virtual double area() const=0;
   protected:
-    Vertices vertexes;
-    bool isconvex;
+	// a Polygon should not be able to modify the vertices in the grid
+	Vertices const *verticesPtr;      
+	VerticesIdx verticesIdx; 
+	bool isconvex;
     //! Test convexity of the polygon
     void checkConvexity();
   };
@@ -141,7 +148,7 @@ namespace Geometry
   public:
     //! Default constructor.
     //! Polygon may be constructed giving Vertices;
-    Polygon(Vertices const & v);
+    Polygon(Vertices const *verticesPtr_, VerticesIdx const &verticesIdx_);
     //! Destructor
     virtual ~Polygon(){};
     /*!
@@ -160,14 +167,13 @@ namespace Geometry
   class Square final: public AbstractPolygon
   {
   public:
-    Square(Vertices const & v);
+    Square(Vertices const *verticesPtr_, VerticesIdx const &verticesIdx_);
     //!Special constructor valid only for squares.
     /*!
       /param origin Point which gives the first vertex of the square.
       /param length The length of the side.
       /param angle In radians, tells how the square is  rotated. 
      */
-    Square(Point2D origin, double length,double angle=0.0);
     Square(Square const &)=default;
     Square(Square&&)=default;
     Square & operator=(const Square &)=default;
@@ -182,7 +188,7 @@ namespace Geometry
   class Triangle final: public AbstractPolygon
   {
   public:
-    Triangle(Vertices const &);
+    Triangle(Vertices const *verticesPtr_, VerticesIdx const &verticesIdx_);
     Triangle(Triangle const &)=default;
     Triangle(Triangle&&)=default;
     Triangle & operator=(const Triangle &)=default;
