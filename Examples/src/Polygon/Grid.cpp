@@ -74,7 +74,6 @@ Grid::Grid(const std::string &filename)
 	// Read polygons 
 	unsigned int polygonType = 0;
 	unsigned int idxVertex = 0;
-	Geometry::Vertices polygonVertices; 
 	std::vector<unsigned int> idxVerticesVec;
 	std::set<Edge> setEdges;
 	std::set<Edge> setInternalEdges; 
@@ -84,7 +83,6 @@ Grid::Grid(const std::string &filename)
 	{
 		// Reset vertices to empty vector
 		idxVerticesVec.resize(0);   
-		polygonVertices.resize(0); 		
 
 		// Read polygon index and type
 		std::istringstream linestream(line);
@@ -95,25 +93,24 @@ Grid::Grid(const std::string &filename)
 		{
 			// Insert vertex
 			idxVerticesVec.push_back(idxVertex);
-			polygonVertices.push_back(vertices[idxVertex]);
 		}
 
-		// Insert first vertex in the back, to close polygon 
-		idxVerticesVec.push_back(idxVerticesVec[0]);
-	
 		// Create polygon object of appropriate type and store it
 		switch (polygonType) 
 		{
 			case 0:  // Triangle
-				polygons.emplace_back(new Geometry::Triangle(polygonVertices)); 
+				polygons.emplace_back(new Geometry::Triangle(&vertices, idxVerticesVec)); 
 				break;
 			case 1:  // Square
-				polygons.emplace_back(new Geometry::Square(polygonVertices)); 
+				polygons.emplace_back(new Geometry::Square(&vertices, idxVerticesVec)); 
 				break;
 			case 2:  // Generic polygon
-				polygons.emplace_back(new Geometry::Polygon(polygonVertices));
+				polygons.emplace_back(new Geometry::Polygon(&vertices, idxVerticesVec));
 				break;
 		}
+
+		// Insert first vertex in the back, to close polygon 
+		idxVerticesVec.push_back(idxVerticesVec[0]);
 
 		// Create edges 
 		for(size_t i = 0; i < idxVerticesVec.size() - 1; ++i)
