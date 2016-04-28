@@ -29,7 +29,7 @@ namespace Geometry{
 	Vertices polygonVertices(verticesIdx.size());
 	for(size_t i = 0; i < verticesIdx.size(); ++i)
 	{
-		polygonVertices.push_back((*verticesPtr)[verticesIdx[i]]);
+		polygonVertices[i] = (*verticesPtr)[verticesIdx[i]];
 	}
 	return polygonVertices;
   }
@@ -113,9 +113,13 @@ namespace Geometry{
   */
   double Polygon::area() const{
     auto siz=this->size();
-    if (siz<3) return 0;
-    double result(0);
+    if (siz<3) return 0.0;
+    double result(0.0);
     Vertices const Ver(this->theVertices());
+
+	for (auto const &i : Ver)
+		std::cout << i.x() << "\t" << i.y() << std::endl;
+
     // I am using C++11 sintax. decltype(expr) returns the
     // type of the expression expr. (I could have used Vertices::size_type, 
     // or just int, here I wanted to show some features of the new standard).

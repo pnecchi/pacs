@@ -146,6 +146,7 @@ double Grid::area() const
 	double totArea = 0.0;
 	for (auto const &i : polygons)
 	{
+		std::cout << "Polygon area: " << i->area() << std::endl;
 		totArea += i->area();
 	}
 	return totArea;
